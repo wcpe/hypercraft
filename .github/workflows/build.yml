@@ -33,15 +33,6 @@ jobs:
         run: cargo build --release -p hypercraft-api -p hypercraft-cli
         working-directory: backend
 
-      - name: Upload backend artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-debian
-          path: |
-            backend/target/release/hypercraft-api*
-            backend/target/release/hypercraft-cli*
-          if-no-files-found: error
-
       - name: Package release files
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
@@ -78,15 +69,6 @@ jobs:
       - name: Build backend
         run: cargo build --release -p hypercraft-api -p hypercraft-cli
         working-directory: backend
-
-      - name: Upload backend artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-windows
-          path: |
-            backend/target/release/hypercraft-api*.exe
-            backend/target/release/hypercraft-cli*.exe
-          if-no-files-found: error
 
       - name: Package release files
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -183,13 +165,6 @@ jobs:
           tar -czf "$ROOT/$BUNDLE_NAME.tar.gz" -C "$ROOT/dist" "$BUNDLE_NAME"
         working-directory: web
 
-      - name: Upload frontend offline artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-debian-offline
-          path: web/web-standalone-debian.tar.gz
-          if-no-files-found: error
-
       - name: Publish to release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
@@ -280,13 +255,6 @@ jobs:
           if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
           Compress-Archive -Path $out -DestinationPath $zipPath
         working-directory: web
-
-      - name: Upload frontend offline artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-windows-offline
-          path: web/web-standalone-windows.zip
-          if-no-files-found: error
 
       - name: Publish to release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
